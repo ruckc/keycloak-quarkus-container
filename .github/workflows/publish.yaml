@@ -1,0 +1,42 @@
+name: Build Image using Containerfile
+on:
+  push:
+    branches:
+      - 'main'
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    name: Build image
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install qemu dependency
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qemu-user-static
+
+      - uses: docker/metadata-action@v3
+        with:
+          images: ghcr.io/ruckc/keycloak
+        tags: |
+          type=edge
+          type=sha
+          type=ref,event=branch
+          type=ref,event=pr
+          type=schedule
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+
+      - name: Buildah Action
+        uses: redhat-actions/buildah-build@v2
+        with:
+          image: ghcr.io/ruckc/keycloak
+          tags: ${{ steps.docker-metadata.outputs.tags }}
+          labels: ${{ steps.docker-metadata.outputs.labels }}
+          archs: amd64,arm64
+          containerfiles: |
+            ./Dockerfile
