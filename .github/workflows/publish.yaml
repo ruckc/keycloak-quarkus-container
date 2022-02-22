@@ -37,6 +37,6 @@ jobs:
           image: ghcr.io/ruckc/keycloak
           tags: ${{ steps.docker-metadata.outputs.tags }}
           labels: ${{ steps.docker-metadata.outputs.labels }}
-          archs: amd64,arm64
+          platforms: linux/amd64,linux/arm64
           containerfiles: |
             ./Dockerfile
