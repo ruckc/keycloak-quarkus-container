@@ -22,14 +22,14 @@ jobs:
       - uses: docker/metadata-action@v3
         with:
           images: ghcr.io/ruckc/keycloak
-        tags: |
-          type=edge
-          type=sha
-          type=ref,event=branch
-          type=ref,event=pr
-          type=schedule
-          type=semver,pattern={{version}}
-          type=semver,pattern={{major}}.{{minor}}
+          tags: |
+            type=edge
+            type=sha
+            type=ref,event=branch
+            type=ref,event=pr
+            type=schedule
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
 
       - name: Buildah Action
         uses: redhat-actions/buildah-build@v2
